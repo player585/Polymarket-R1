@@ -6,34 +6,36 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="1.0.0">
-<title>Polymarket R1 v1.0.0</title>
+<meta name="version" content="2.0.0">
+<title>Polymarket R1 v2.0.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════
-   Polymarket-inspired palette
+   Polymarket.com 1:1 palette (measured from site)
    ══════════════════════════════════════════════ */
 :root {
-  --bg:#0d1520;
-  --surf:#141f2e;
-  --surf2:#1a2a3e;
-  --offset:#22344d;
-  --div:#2c3f52;
-  --bord:#3a5170;
+  --bg:#0d0d17;
+  --surf:#16161e;
+  --surf2:#1a1a2e;
+  --offset:#22223a;
+  --div:#2a2a3a;
+  --bord:#333344;
   --txt:#ffffff;
-  --txt2:#c8d2df;
-  --muted:#8b96a3;
-  --faint:#5a6879;
-  --yes:#00d9a0;         /* Polymarket signature green */
-  --yes-bright:#25f0b4;
-  --no:#ff5c8d;          /* Pink/red for No */
-  --no-bright:#ff7ba2;
-  --neutral:#7ba7ff;
-  --warn:#ffb84d;
-  --live:#00d9a0;
-  --glow-yes:0 0 4px rgba(0,217,160,.7),0 0 10px rgba(0,217,160,.35);
-  --glow-no:0 0 4px rgba(255,92,141,.7),0 0 10px rgba(255,92,141,.35);
+  --txt2:#c8c8d4;
+  --muted:#888899;
+  --faint:#5a5a6a;
+  --yes:#26c46e;         /* Polymarket Buy Yes green */
+  --yes-hi:#2ecc71;
+  --no:#e8536c;          /* Polymarket Buy No pink */
+  --no-hi:#ff6b8a;
+  --trade:#2563eb;       /* Trade CTA blue */
+  --up:#26c46e;
+  --dn:#e8536c;
+  --chip-active-bg:#ffffff;
+  --chip-active-txt:#000000;
+  --chip-bg:#22223a;
+  --chip-txt:#aaaabb;
   --mono:'JetBrains Mono',monospace;
   --body:'Inter',sans-serif;
   --xs:0.5625rem;--sm:0.625rem;--base:0.6875rem;--md:0.8125rem;--lg:0.9375rem;
@@ -42,127 +44,157 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%;-webkit-text-size-adjust:none}
 body{font-family:var(--body);font-size:var(--base);color:var(--txt);
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(0,217,160,.10) 0%, transparent 55%),
-    var(--bg);
+  background:var(--bg);
   height:100dvh;overflow:hidden;display:flex;flex-direction:column;max-width:240px;margin:0 auto;
   position:relative}
 button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 
-/* ── Header ── */
+/* ── Header (Polymarket wordmark) ── */
 .header{display:flex;align-items:center;justify-content:space-between;padding:4px 8px;
-  background:linear-gradient(180deg,var(--surf) 0%,var(--bg) 100%);
-  border-bottom:2px solid var(--yes);box-shadow:0 0 8px rgba(0,217,160,.25);
-  flex-shrink:0;min-height:24px;position:relative;z-index:2}
+  background:var(--bg);border-bottom:1px solid var(--div);flex-shrink:0;min-height:22px;position:relative;z-index:2}
 .header-brand{display:flex;align-items:center;gap:5px}
-.brand-mark{width:14px;height:14px;border-radius:50%;background:var(--yes);position:relative;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;box-shadow:var(--glow-yes)}
-.brand-mark::after{content:'P';position:absolute;color:var(--bg);font-family:var(--body);font-size:9px;font-weight:800}
-.brand-text{font-family:var(--body);font-size:var(--sm);font-weight:700;letter-spacing:.04em;color:var(--txt)}
-.brand-text span{color:var(--yes);text-shadow:var(--glow-yes)}
-.header-right{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:7px}
-.live-pulse{width:6px;height:6px;border-radius:50%;background:var(--yes);animation:pulse 1.6s ease-in-out infinite;box-shadow:var(--glow-yes)}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(0.8)}}
-.live-text{color:var(--yes);font-weight:700;letter-spacing:.04em}
+.brand-mark{width:12px;height:12px;background:#fff;position:relative;flex-shrink:0;
+  border-radius:2px;display:flex;align-items:center;justify-content:center}
+.brand-mark::before{content:'';width:5px;height:8px;background:var(--bg);border-radius:1px}
+.brand-text{font-family:var(--body);font-size:var(--sm);font-weight:800;letter-spacing:-0.01em;color:var(--txt)}
+.header-right{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:7px;color:var(--muted)}
+.header-vol{color:var(--yes);font-weight:700}
 
-/* ── Tabs ── */
-.tabs{display:flex;background:var(--surf);border-bottom:1px solid var(--div);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:1 0 auto;padding:5px 6px;font-family:var(--body);font-size:var(--xs);font-weight:700;text-align:center;
-  color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid transparent;
-  cursor:pointer;min-height:22px;display:flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap}
-.tab.active{color:var(--yes);border-bottom-color:var(--yes);text-shadow:var(--glow-yes)}
+/* ── Category Nav Chips (main horizontal scroll) ── */
+.nav{display:flex;gap:0;background:var(--bg);border-bottom:1px solid var(--div);overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.nav::-webkit-scrollbar{display:none}
+.nav-item{flex:0 0 auto;padding:5px 8px;font-family:var(--body);font-size:9px;font-weight:600;
+  color:var(--muted);white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:3px;
+  border-bottom:2px solid transparent;min-height:22px}
+.nav-item.active{color:var(--txt);border-bottom-color:var(--txt)}
+.nav-item .ico{font-size:10px}
+.nav-sep{flex:0 0 auto;width:1px;background:var(--div);margin:4px 4px}
 
-/* ── Main ─ MLB scroll fix recipe ── */
+/* ── Main (MLB scroll fix) ── */
 .main{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;background:var(--bg);position:relative}
 
-/* ── Market/Event row ── */
-.event-row{display:flex;flex-direction:column;gap:3px;padding:5px 6px;
-  border-bottom:1px solid color-mix(in oklch,var(--div) 55%,transparent);
-  background:var(--surf);cursor:pointer;transition:background .12s;min-height:42px}
-.event-row.focused{background:var(--offset);box-shadow:inset 3px 0 0 var(--yes),0 0 6px rgba(0,217,160,.3)}
-.event-row:hover{background:var(--surf2)}
-.event-title{font-family:var(--body);font-size:var(--xs);font-weight:600;color:var(--txt);line-height:1.25;
+/* ── Event Card ── */
+.card{background:var(--surf2);border:1px solid var(--div);border-radius:6px;margin:4px;padding:6px;cursor:pointer;transition:background .12s;position:relative}
+.card.focused{background:var(--offset);border-color:var(--yes);box-shadow:0 0 6px rgba(38,196,110,.35)}
+.card:hover{background:var(--offset)}
+.card-head{display:flex;gap:6px;align-items:flex-start;margin-bottom:5px}
+.card-icon{width:22px;height:22px;border-radius:4px;background:var(--offset);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.card-icon img{width:100%;height:100%;object-fit:cover}
+.card-title{flex:1;font-family:var(--body);font-size:var(--xs);font-weight:700;color:var(--txt);line-height:1.25;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.event-meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:.03em}
-.event-meta .vol{color:var(--yes-bright);font-weight:700}
-.event-meta .mkts{color:var(--muted)}
+.card-vol{position:absolute;top:6px;right:6px;font-family:var(--mono);font-size:6.5px;color:var(--muted);font-weight:600}
 
-/* Yes/No inline probability strip for binary markets */
-.prob-strip{display:flex;align-items:center;gap:4px;margin-top:2px;font-family:var(--mono);font-size:8px;font-weight:700}
-.prob-bar{flex:1;height:5px;background:var(--offset);border-radius:2px;overflow:hidden;position:relative}
-.prob-bar-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--yes) 0%,var(--yes-bright) 100%);border-radius:2px;box-shadow:var(--glow-yes);transition:width .3s}
-.prob-bar-fill.no{background:linear-gradient(90deg,var(--no) 0%,var(--no-bright) 100%);box-shadow:var(--glow-no)}
-.prob-pct{color:var(--yes);font-weight:700;min-width:26px;text-align:right;text-shadow:var(--glow-yes)}
-.prob-pct.no{color:var(--no);text-shadow:var(--glow-no)}
+/* Outcome rows inside card */
+.outcomes{display:flex;flex-direction:column;gap:3px}
+.outcome{display:grid;grid-template-columns:1fr auto auto auto;gap:3px;align-items:center;font-size:8px}
+.outcome-flag{width:12px;height:12px;border-radius:2px;overflow:hidden;background:var(--offset);flex-shrink:0}
+.outcome-flag img{width:100%;height:100%;object-fit:cover}
+.outcome-name{color:var(--txt2);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:3px}
+.outcome-pct{font-family:var(--body);font-size:10px;font-weight:700;color:var(--txt);min-width:26px;text-align:right}
+.btn-yes,.btn-no{padding:2px 5px;border-radius:3px;font-family:var(--body);font-size:7.5px;font-weight:700;line-height:1;min-height:14px;display:inline-flex;align-items:center;justify-content:center;letter-spacing:-.01em;white-space:nowrap}
+.btn-yes{background:rgba(38,196,110,.15);color:var(--yes)}
+.btn-no{background:rgba(232,83,108,.15);color:var(--no)}
+.card.focused .btn-yes{background:var(--yes);color:#000}
+.card.focused .btn-no{background:var(--no);color:#000}
 
-/* Multi-outcome preview (top choice) */
-.top-outcome{display:flex;justify-content:space-between;align-items:center;font-family:var(--body);font-size:8px;color:var(--txt2);margin-top:2px}
-.top-outcome .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px}
-.top-outcome .pct{color:var(--yes);font-weight:700;text-shadow:var(--glow-yes);font-family:var(--mono);font-size:9px}
+/* Binary Yes/No gauge (for BTC-style up/down markets) */
+.gauge{display:flex;align-items:center;gap:5px;padding:4px 2px}
+.gauge-ring{width:34px;height:34px;border-radius:50%;position:relative;flex-shrink:0;
+  background:conic-gradient(var(--yes) var(--pct,50%),var(--no) var(--pct,50%));
+  display:flex;align-items:center;justify-content:center}
+.gauge-ring::before{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--surf2)}
+.gauge-txt{position:relative;font-family:var(--body);font-weight:800;font-size:9px;color:var(--txt);z-index:1}
+.gauge-lbl{font-family:var(--body);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 
-/* ── Detail view ── */
-.detail-back{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--surf);
-  border-bottom:1px solid var(--div);font-family:var(--mono);font-size:var(--xs);color:var(--yes);
-  font-weight:700;cursor:pointer;min-height:22px;text-transform:uppercase;letter-spacing:.04em}
-.detail-back:hover{background:var(--surf2)}
+/* ── Detail page ── */
+.detail-back{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--bg);
+  border-bottom:1px solid var(--div);font-family:var(--body);font-size:var(--xs);color:var(--txt2);
+  font-weight:600;cursor:pointer;min-height:22px;letter-spacing:.02em}
+.detail-back:hover{color:var(--txt)}
+.detail-back .crumb{color:var(--muted);font-size:8px}
 
-.detail-header{padding:6px 8px;background:linear-gradient(180deg,var(--surf2) 0%,var(--surf) 100%);border-bottom:1px solid var(--div)}
-.detail-title{font-family:var(--body);font-size:var(--sm);font-weight:700;color:var(--txt);line-height:1.3;margin-bottom:4px}
-.detail-stats{display:flex;justify-content:space-between;gap:6px;font-family:var(--mono);font-size:7px}
-.detail-stat{display:flex;flex-direction:column;gap:1px;flex:1}
-.detail-stat .lbl{color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-size:6px}
-.detail-stat .val{color:var(--txt);font-weight:700;font-size:8px}
-.detail-stat .val.yes{color:var(--yes-bright);text-shadow:var(--glow-yes)}
+.detail-header{padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--div)}
+.detail-title-row{display:flex;gap:6px;align-items:flex-start;margin-bottom:4px}
+.detail-icon{width:24px;height:24px;border-radius:4px;background:var(--offset);overflow:hidden;flex-shrink:0}
+.detail-icon img{width:100%;height:100%;object-fit:cover}
+.detail-title{font-family:var(--body);font-size:11px;font-weight:800;color:var(--txt);line-height:1.25;flex:1}
 
-/* Sub-tabs */
-.subtabs{display:flex;background:var(--surf2);border-bottom:1px solid var(--div);flex-shrink:0}
-.subtab{flex:1;padding:4px 6px;font-family:var(--mono);font-size:7px;font-weight:700;
-  color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid transparent;
-  cursor:pointer;text-align:center}
-.subtab.active{color:var(--yes);border-bottom-color:var(--yes);text-shadow:var(--glow-yes)}
+/* Legend under title */
+.legend{display:flex;flex-wrap:wrap;gap:5px 8px;margin-top:2px}
+.legend-item{display:flex;align-items:center;gap:2px;font-family:var(--body);font-size:8px;color:var(--txt2)}
+.legend-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.legend-item .n{color:var(--muted);max-width:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend-item .p{color:var(--txt);font-weight:700}
 
-/* Market card inside detail */
-.mkt-card{padding:6px 8px;border-bottom:1px solid color-mix(in oklch,var(--div) 50%,transparent);background:var(--surf)}
-.mkt-question{font-family:var(--body);font-size:var(--xs);font-weight:600;color:var(--txt);line-height:1.3;margin-bottom:4px}
-.mkt-outcomes{display:flex;flex-direction:column;gap:3px}
-.mkt-outcome-row{display:flex;align-items:center;gap:5px}
-.mkt-outcome-name{font-family:var(--body);font-size:8px;color:var(--txt2);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.mkt-outcome-bar{width:60px;height:4px;background:var(--offset);border-radius:2px;overflow:hidden;flex-shrink:0}
-.mkt-outcome-bar-fill{height:100%;background:linear-gradient(90deg,var(--yes) 0%,var(--yes-bright) 100%);border-radius:2px;box-shadow:var(--glow-yes)}
-.mkt-outcome-bar-fill.no{background:linear-gradient(90deg,var(--no) 0%,var(--no-bright) 100%);box-shadow:var(--glow-no)}
-.mkt-outcome-pct{font-family:var(--mono);font-size:9px;color:var(--yes);font-weight:700;min-width:26px;text-align:right;text-shadow:var(--glow-yes)}
-.mkt-outcome-pct.no{color:var(--no);text-shadow:var(--glow-no)}
-.mkt-vol{font-family:var(--mono);font-size:6px;color:var(--muted);margin-top:3px;text-align:right;letter-spacing:.04em}
+/* Chart */
+.chart-wrap{padding:4px 6px;background:var(--surf);border-bottom:1px solid var(--div)}
+.chart{width:100%;height:70px;display:block}
+.chart-time{display:flex;gap:3px;justify-content:flex-end;padding:3px 6px 0;background:var(--surf);border-bottom:1px solid var(--div)}
+.chart-time button{font-family:var(--mono);font-size:7px;font-weight:700;color:var(--muted);padding:2px 5px;border-radius:8px;background:transparent}
+.chart-time button.active{background:var(--offset);color:var(--txt)}
 
-/* Description text */
-.desc{padding:8px;font-family:var(--body);font-size:var(--xs);color:var(--txt2);line-height:1.4;white-space:pre-wrap;word-wrap:break-word}
+/* Vol + end date bar */
+.detail-meta{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;background:var(--bg);border-bottom:1px solid var(--div);font-family:var(--body);font-size:8px}
+.detail-meta .lbl{color:var(--muted)}
+.detail-meta .val{color:var(--txt);font-weight:700}
+
+/* Outcome list rows on detail */
+.section-hdr{padding:6px 8px 2px;font-family:var(--body);font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:var(--bg);border-top:1px solid var(--div)}
+
+.orow{display:grid;grid-template-columns:14px 1fr auto auto auto;gap:4px;align-items:center;
+  padding:6px 8px;border-bottom:1px solid var(--div);background:var(--bg)}
+.orow-flag{width:14px;height:14px;border-radius:2px;overflow:hidden;background:var(--offset)}
+.orow-flag img{width:100%;height:100%;object-fit:cover}
+.orow-name{font-family:var(--body);font-size:9px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.orow-name .sub{display:block;font-size:6.5px;color:var(--muted);font-weight:500}
+.orow-pct{font-family:var(--body);font-size:12px;font-weight:800;color:var(--txt);min-width:26px;text-align:right;line-height:1}
+.orow-delta{font-family:var(--body);font-size:7px;font-weight:700;line-height:1}
+.orow-delta.up{color:var(--up)}
+.orow-delta.dn{color:var(--dn)}
+.orow-buttons{display:flex;gap:2px}
+.orow .btn-yes,.orow .btn-no{font-size:7px;padding:2px 4px;min-height:15px}
+
+/* Trade sticky panel */
+.trade{padding:6px 8px;background:var(--surf);border-top:1px solid var(--div);position:sticky;bottom:0;z-index:3}
+.trade-row{display:flex;gap:4px;margin-bottom:4px}
+.trade-btn{flex:1;padding:5px 6px;border-radius:4px;font-family:var(--body);font-size:8px;font-weight:700;text-align:center}
+.trade-btn.yes{background:rgba(38,196,110,.15);color:var(--yes);border:1px solid var(--yes)}
+.trade-btn.no{background:rgba(232,83,108,.15);color:var(--no);border:1px solid var(--no)}
+.trade-cta{width:100%;padding:6px;border-radius:4px;background:var(--trade);color:#fff;font-family:var(--body);font-size:9px;font-weight:700;text-align:center;letter-spacing:.02em}
+.trade-fine{font-family:var(--body);font-size:6.5px;color:var(--muted);text-align:center;margin-top:3px;line-height:1.3}
+
+/* FAQ accordion */
+.faq{padding:6px 8px;background:var(--bg);border-top:1px solid var(--div)}
+.faq-item{padding:5px 0;border-bottom:1px solid var(--div);font-family:var(--body);font-size:9px}
+.faq-item:last-child{border-bottom:none}
+.faq-q{display:flex;justify-content:space-between;color:var(--txt);font-weight:600;cursor:pointer}
+.faq-a{color:var(--txt2);margin-top:4px;line-height:1.4;font-size:8px;display:none;white-space:pre-wrap}
+.faq-item.open .faq-a{display:block}
+.faq-q .chev{color:var(--muted);font-size:9px}
 
 /* Empty/loading */
 .empty{text-align:center;padding:24px 12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px}
 .empty-icon{font-size:32px;opacity:.4}
 .empty-title{font-family:var(--body);font-size:var(--sm);color:var(--txt2);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.empty-sub{font-family:var(--mono);font-size:var(--xs);color:var(--muted);max-width:200px;line-height:1.5}
-.spinner{width:24px;height:24px;border-radius:50%;border:2px solid var(--offset);border-top-color:var(--yes);animation:spin 1s linear infinite;box-shadow:var(--glow-yes)}
+.empty-sub{font-family:var(--body);font-size:8px;color:var(--muted);max-width:200px;line-height:1.5}
+.spinner{width:24px;height:24px;border-radius:50%;border:2px solid var(--offset);border-top-color:var(--yes);animation:spin 1s linear infinite}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
 /* Footer */
 .footer{display:flex;align-items:center;justify-content:space-between;padding:2px 8px;
-  background:linear-gradient(0deg,var(--surf) 0%,var(--bg) 100%);
-  border-top:1px solid var(--yes);box-shadow:0 0 6px rgba(0,217,160,.25);
-  flex-shrink:0;min-height:16px;font-family:var(--mono);font-size:7px;position:relative;z-index:2}
+  background:var(--bg);border-top:1px solid var(--div);flex-shrink:0;min-height:14px;font-family:var(--mono);font-size:7px}
 .footer-left{color:var(--muted)}
 .footer-mid{flex:1;text-align:center;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
-.footer-right{color:var(--yes);display:flex;align-items:center;gap:3px;font-weight:700;text-shadow:var(--glow-yes)}
+.footer-right{color:var(--yes);display:flex;align-items:center;gap:3px;font-weight:700}
 
 /* Prompt hint */
-.prompt{padding:3px 8px;text-align:center;font-family:var(--mono);font-size:7px;color:var(--muted);background:var(--surf);border-top:1px solid var(--div);flex-shrink:0;letter-spacing:.05em;position:relative;z-index:2}
-.prompt span.k{color:var(--yes);font-weight:700;text-shadow:var(--glow-yes)}
+.prompt{padding:2px 8px;text-align:center;font-family:var(--mono);font-size:6.5px;color:var(--muted);background:var(--bg);border-top:1px solid var(--div);flex-shrink:0;letter-spacing:.05em}
+.prompt span.k{color:var(--txt);font-weight:700}
 
 /* Debug HUD */
-.dbg{position:fixed;top:24px;left:0;right:0;max-width:240px;margin:0 auto;
-  background:rgba(0,0,0,0.85);color:#0f0;font-family:var(--mono);font-size:8px;
-  padding:4px 6px;z-index:9999;display:none;line-height:1.3;border-bottom:1px solid #0f0}
+.dbg{position:fixed;top:22px;left:0;right:0;max-width:240px;margin:0 auto;
+  background:rgba(0,0,0,0.9);color:#0f0;font-family:var(--mono);font-size:8px;
+  padding:4px 6px;z-index:9999;display:none;line-height:1.3}
 .dbg.show{display:block}
 .dbg-row{display:flex;justify-content:space-between}
 .dbg-evt{color:#0ff}
@@ -173,54 +205,74 @@ button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
 <header class="header" id="appHeader">
   <div class="header-brand">
     <div class="brand-mark"></div>
-    <div class="brand-text">POLY<span>MARKET</span></div>
+    <div class="brand-text">Polymarket</div>
   </div>
   <div class="header-right">
-    <span class="live-pulse"></span>
-    <span class="live-text" id="totalVol">—</span>
+    <span class="header-vol" id="totalVol">—</span>
   </div>
 </header>
 
-<!-- Debug HUD -->
 <div class="dbg" id="dbg">
-  <div class="dbg-row"><span class="dbg-evt">scrollUp</span>  <span id="dbgUp">0</span></div>
+  <div class="dbg-row"><span class="dbg-evt">scrollUp</span><span id="dbgUp">0</span></div>
   <div class="dbg-row"><span class="dbg-evt">scrollDown</span><span id="dbgDown">0</span></div>
-  <div class="dbg-row"><span class="dbg-evt">sideClick</span> <span id="dbgSide">0</span></div>
-  <div class="dbg-row"><span class="dbg-evt">longPress</span> <span id="dbgLong">0</span></div>
+  <div class="dbg-row"><span class="dbg-evt">sideClick</span><span id="dbgSide">0</span></div>
+  <div class="dbg-row"><span class="dbg-evt">longPress</span><span id="dbgLong">0</span></div>
   <div class="dbg-row"><span class="dbg-evt">state</span><span id="dbgState">list</span></div>
 </div>
 
-<div class="tabs" id="tabs"></div>
+<div class="nav" id="nav"></div>
 <main class="main" id="main"></main>
 
 <div class="prompt">
-  <span class="k">SCROLL</span> · <span class="k">PTT</span> open · <span class="k">LONG</span> refresh
+  <span class="k">WHEEL</span> · <span class="k">PTT</span> open · <span class="k">LONG</span> refresh
 </div>
 
 <footer class="footer">
-  <span class="footer-left" id="footerLeft">v1.0.0</span>
+  <span class="footer-left" id="footerLeft">v2.0.0</span>
   <span class="footer-mid" id="footerMid">Loading…</span>
   <span class="footer-right"><span id="countdown">30s</span></span>
 </footer>
 
 <script>
 /* ═══════════════════════════════════════════════
-   Polymarket R1 v1.0.0
-   Free public API: gamma-api.polymarket.com
+   Polymarket R1 v2.0.0 — 1:1 clone of polymarket.com
+   Free public API: gamma-api.polymarket.com + clob.polymarket.com
    ═══════════════════════════════════════════════ */
 
-const TABS = [
-  { key: 'trending',   label: 'TRENDING',   tag: null },
-  { key: 'politics',   label: 'POLITICS',   tag: 'politics' },
-  { key: 'sports',     label: 'SPORTS',     tag: 'sports' },
-  { key: 'crypto',     label: 'CRYPTO',     tag: 'crypto' },
-  { key: 'economy',    label: 'ECONOMY',    tag: 'economy' },
-  { key: 'tech',       label: 'TECH',       tag: 'tech' }
+const NAV = [
+  { key: 'trending',    label: 'Trending',     icon: '🔥', tag: null },
+  { key: 'world-cup',   label: 'World Cup',    icon: '⚽', tag: 'fifa-world-cup' },
+  { key: 'breaking',    label: 'Breaking',     icon: '',   tag: 'breaking-news' },
+  { key: 'sep',         label: '',             sep: true },
+  { key: 'politics',    label: 'Politics',     icon: '',   tag: 'politics' },
+  { key: 'sports',      label: 'Sports',       icon: '',   tag: 'sports' },
+  { key: 'crypto',      label: 'Crypto',       icon: '',   tag: 'crypto' },
+  { key: 'esports',     label: 'Esports',      icon: '',   tag: 'esports' },
+  { key: 'iran',        label: 'Iran',         icon: '',   tag: 'iran' },
+  { key: 'finance',     label: 'Finance',      icon: '',   tag: 'finance' },
+  { key: 'geopolitics', label: 'Geopolitics',  icon: '',   tag: 'geopolitics' },
+  { key: 'tech',        label: 'Tech',         icon: '',   tag: 'tech' },
+  { key: 'culture',     label: 'Culture',      icon: '',   tag: 'culture' },
+  { key: 'economy',     label: 'Economy',      icon: '',   tag: 'economy' },
+  { key: 'weather',     label: 'Weather',      icon: '',   tag: 'weather' },
+  { key: 'elections',   label: 'Elections',    icon: '',   tag: 'elections' }
 ];
 
 const API = 'https://gamma-api.polymarket.com';
+const CLOB = 'https://clob.polymarket.com';
 const LIST_REFRESH_MS = 30000;
 const DETAIL_REFRESH_MS = 15000;
+const TIME_RANGES = [
+  { key: '1h',  label: '1H',  interval: '1h',  fidelity: 1  },
+  { key: '6h',  label: '6H',  interval: '6h',  fidelity: 5  },
+  { key: '1d',  label: '1D',  interval: '1d',  fidelity: 15 },
+  { key: '1w',  label: '1W',  interval: '1w',  fidelity: 60 },
+  { key: '1m',  label: '1M',  interval: '1m',  fidelity: 240 },
+  { key: 'all', label: 'ALL', interval: 'max', fidelity: 720 }
+];
+
+// Chart colors that match polymarket's line palette
+const LINE_COLORS = ['#4a9eff','#e8536c','#ffb84d','#26c46e','#a855f7','#ff8dc7','#22d3ee','#f97316'];
 
 const S = {
   tab: 'trending',
@@ -228,24 +280,20 @@ const S = {
   focusedIdx: 0,
   loading: false,
   refreshing: false,
-  view: 'list',              // 'list' | 'detail'
-  selectedEvent: null,       // full event object with markets
+  view: 'list',
+  selectedEvent: null,
+  selectedTimeRange: '1w',
+  priceHistories: {},           // outcomeIdx -> [{t,p}]
   detailScrollIdx: 0,
-  detailSubTab: 'markets',   // 'markets' | 'details'
   detailTimer: null,
   countdown: 30,
   countdownTimer: null,
-  lastFetch: 0,
-  dbgOn: false
+  faqOpen: {},                  // faqIdx -> bool
 };
 
 const $ = id => document.getElementById(id);
 
-/* ── Debug HUD ── */
-window.__dbg = {
-  counts: { up:0, down:0, side:0, long:0 },
-  hit(k) { this.counts[k]++; $(`dbg${k[0].toUpperCase()+k.slice(1)}`).textContent = this.counts[k]; }
-};
+window.__dbg = { counts:{up:0,down:0,side:0,long:0}, hit(k){ this.counts[k]++; $(`dbg${k[0].toUpperCase()+k.slice(1)}`).textContent=this.counts[k]; }};
 
 /* ── Formatters ── */
 function fmtVol(n) {
@@ -255,100 +303,144 @@ function fmtVol(n) {
   if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
   return '$' + n.toFixed(0);
 }
-function pct(p) {
+function pct(p, allowDecimal=false) {
   const n = (parseFloat(p) || 0) * 100;
   if (n < 1 && n > 0) return '<1%';
   if (n > 99 && n < 100) return '>99%';
   return Math.round(n) + '%';
 }
+function cents(p) { return Math.round((parseFloat(p)||0) * 100) + '¢'; }
 function parseArr(s) {
   if (!s) return [];
   if (Array.isArray(s)) return s;
   try { return JSON.parse(s); } catch(e) { return []; }
 }
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
 
 /* ── API ── */
 async function fetchEvents(tab) {
-  const t = TABS.find(x => x.key === tab);
+  const t = NAV.find(x => x.key === tab);
   let url = `${API}/events?active=true&closed=false&limit=40&order=volume24hr&ascending=false&_=${Math.floor(Date.now()/5000)}`;
   if (t?.tag) url += `&tag_slug=${t.tag}`;
-  const r = await fetch(url, { cache: 'no-store' });
+  const r = await fetch(url, { cache:'no-store' });
   if (!r.ok) throw new Error('HTTP ' + r.status);
-  const data = await r.json();
-  return (data || []).filter(e => (e.markets || []).length > 0);
+  return (await r.json() || []).filter(e => (e.markets||[]).length > 0);
 }
-
 async function fetchEventDetail(id) {
-  const url = `${API}/events/${id}?_=${Date.now()}`;
-  const r = await fetch(url, { cache: 'no-store' });
+  const r = await fetch(`${API}/events/${id}?_=${Date.now()}`, { cache:'no-store' });
   if (!r.ok) throw new Error('HTTP ' + r.status);
   return await r.json();
+}
+async function fetchPriceHistory(clobTokenId, rangeKey) {
+  const r = TIME_RANGES.find(x => x.key === rangeKey) || TIME_RANGES[3];
+  try {
+    const url = `${CLOB}/prices-history?market=${clobTokenId}&interval=${r.interval}&fidelity=${r.fidelity}`;
+    const resp = await fetch(url);
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return data.history || [];
+  } catch(e) { return []; }
 }
 
 /* ── Load list ── */
 async function loadList() {
-  S.loading = true;
-  S.refreshing = true;
-  updateFooter();
+  S.loading = true; S.refreshing = true; updateFooter();
   if (S.events.length === 0) render();
   try {
     const events = await fetchEvents(S.tab);
     S.events = events;
     S.focusedIdx = Math.min(S.focusedIdx, Math.max(0, events.length - 1));
-    S.lastFetch = Date.now();
-  } catch(e) {
-    console.error('load fail', e);
-  }
-  S.loading = false;
-  S.refreshing = false;
-  updateFooter();
-  render();
-  updateTotalVol();
+  } catch(e) { console.error('load fail', e); }
+  S.loading = false; S.refreshing = false;
+  updateFooter(); render(); updateTotalVol();
 }
 
 function updateTotalVol() {
-  const total = S.events.reduce((s, e) => s + (parseFloat(e.volume24hr) || 0), 0);
-  $('totalVol').textContent = fmtVol(total);
+  const total = S.events.reduce((s, e) => s + (parseFloat(e.volume24hr)||0), 0);
+  $('totalVol').textContent = fmtVol(total) + ' 24h';
 }
 
-/* ── Render tabs ── */
-function renderTabs() {
-  const t = $('tabs');
-  t.innerHTML = TABS.map(x =>
-    `<button class="tab ${x.key === S.tab ? 'active' : ''}" onclick="switchTab('${x.key}')">${x.label}</button>`
-  ).join('');
+/* ── Nav ── */
+function renderNav() {
+  const nav = $('nav');
+  nav.innerHTML = NAV.map(n => {
+    if (n.sep) return `<div class="nav-sep"></div>`;
+    const active = n.key === S.tab ? 'active' : '';
+    const ico = n.icon ? `<span class="ico">${n.icon}</span>` : '';
+    return `<button class="nav-item ${active}" onclick="switchTab('${n.key}')">${ico}${n.label}</button>`;
+  }).join('');
+  // Scroll active into view
+  requestAnimationFrame(() => {
+    const active = nav.querySelector('.nav-item.active');
+    if (active) active.scrollIntoView({ inline:'center', block:'nearest', behavior:'auto' });
+  });
 }
-
 function switchTab(key) {
   if (key === S.tab || S.view !== 'list') return;
-  S.tab = key;
-  S.focusedIdx = 0;
-  S.events = [];
-  loadList();
+  S.tab = key; S.focusedIdx = 0; S.events = []; loadList();
 }
 
-/* ── Get top outcome from event ── */
-function topOutcome(event) {
-  // Find the market with highest liquidity, then its highest-prob outcome
-  const markets = event.markets || [];
-  if (markets.length === 0) return null;
-  // Prefer binary Yes/No first market with meaningful data
-  let best = markets[0];
-  for (const m of markets) {
-    if ((parseFloat(m.liquidity) || 0) > (parseFloat(best.liquidity) || 0)) best = m;
+/* ── Extract outcome info from event ── */
+function eventOutcomes(event) {
+  // Combine all markets into a unified outcome list (for multi-market events like "World Cup Winner")
+  const markets = (event.markets||[]).slice();
+  // Case A: event with many yes/no markets grouped by team (World Cup Winner has 60 markets)
+  //   -> use each market's Yes price as that outcome's probability
+  // Case B: single market with multi-outcome (e.g. "Next PM")
+  //   -> outcomes/prices arrays
+  // Case C: single binary Yes/No market
+  //   -> outcome = Yes with price
+  const grouped = markets.length > 1 && markets.every(m => {
+    const o = parseArr(m.outcomes);
+    return o.length === 2 && o[0].toLowerCase() === 'yes';
+  });
+
+  let list = [];
+  if (grouped) {
+    // Use groupItemTitle (e.g. "France") for name
+    list = markets.map(m => {
+      const prices = parseArr(m.outcomePrices).map(parseFloat);
+      return {
+        name: m.groupItemTitle || m.question || '?',
+        yes: prices[0] || 0,
+        no: prices[1] || 0,
+        vol24: parseFloat(m.volume24hr) || 0,
+        icon: m.icon || m.image,
+        market: m
+      };
+    });
+  } else if (markets.length === 1) {
+    const m = markets[0];
+    const outcomes = parseArr(m.outcomes);
+    const prices = parseArr(m.outcomePrices).map(parseFloat);
+    list = outcomes.map((o, i) => ({
+      name: o,
+      yes: prices[i] || 0,
+      no: 1 - (prices[i] || 0),
+      vol24: parseFloat(m.volume24hr) || 0,
+      icon: m.icon || m.image,
+      market: m,
+      binaryYesNo: outcomes.length === 2 && outcomes[0].toLowerCase() === 'yes'
+    }));
+  } else {
+    // Multi-market non-grouped — take first market
+    const m = markets[0];
+    const outcomes = parseArr(m.outcomes);
+    const prices = parseArr(m.outcomePrices).map(parseFloat);
+    list = outcomes.map((o, i) => ({
+      name: o, yes: prices[i]||0, no: 1-(prices[i]||0),
+      vol24: parseFloat(m.volume24hr)||0, icon: m.icon||m.image, market: m
+    }));
   }
-  const outcomes = parseArr(best.outcomes);
-  const prices = parseArr(best.outcomePrices).map(x => parseFloat(x) || 0);
-  if (outcomes.length === 0) return null;
-  let topIdx = 0;
-  for (let i = 1; i < prices.length; i++) if (prices[i] > prices[topIdx]) topIdx = i;
-  return {
-    binary: outcomes.length === 2 && outcomes[0].toLowerCase() === 'yes',
-    name: outcomes[topIdx],
-    price: prices[topIdx],
-    yesPrice: outcomes.length === 2 && outcomes[0].toLowerCase() === 'yes' ? prices[0] : null,
-    market: best
-  };
+  return { list: list.sort((a,b) => b.yes - a.yes), grouped };
 }
 
 /* ── Render list ── */
@@ -359,72 +451,99 @@ function renderList() {
     return;
   }
   if (S.events.length === 0) {
-    main.innerHTML = `<div class="empty"><div class="empty-icon">◯</div><div class="empty-title">NO MARKETS</div><div class="empty-sub">No active events in this category.</div></div>`;
+    main.innerHTML = `<div class="empty"><div class="empty-icon">◯</div><div class="empty-title">No markets</div><div class="empty-sub">No active events in this category.</div></div>`;
     return;
   }
-  main.innerHTML = S.events.map((e, i) => {
-    const top = topOutcome(e);
-    const isFocused = i === S.focusedIdx;
-    const vol24 = fmtVol(e.volume24hr);
-    const mktCount = (e.markets || []).length;
-    let probHtml = '';
-    if (top) {
-      if (top.binary) {
-        const yesPct = Math.round(top.yesPrice * 100);
-        probHtml = `
-          <div class="prob-strip">
-            <span class="prob-pct">${pct(top.yesPrice)}</span>
-            <div class="prob-bar"><div class="prob-bar-fill" style="width:${yesPct}%"></div></div>
-            <span class="prob-pct no">${pct(1 - top.yesPrice)}</span>
-          </div>`;
-      } else {
-        probHtml = `
-          <div class="top-outcome">
-            <span class="name">${escapeHtml(top.name)}</span>
-            <span class="pct">${pct(top.price)}</span>
-          </div>`;
-      }
-    }
-    return `
-      <div class="event-row ${isFocused ? 'focused' : ''}" data-idx="${i}" onclick="openEvent(${i})">
-        <div class="event-title">${escapeHtml(e.title || '?')}</div>
-        <div class="event-meta">
-          <span class="vol">${vol24} 24h</span>
-          <span class="mkts">${mktCount} market${mktCount !== 1 ? 's' : ''}</span>
-        </div>
-        ${probHtml}
-      </div>`;
-  }).join('');
+  main.innerHTML = S.events.map((e, i) => renderCard(e, i)).join('');
   scrollFocusedIntoView();
 }
 
-function scrollFocusedIntoView() {
-  const el = document.querySelector('.event-row.focused');
-  if (el) el.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+function renderCard(event, i) {
+  const { list } = eventOutcomes(event);
+  const top = list.slice(0, 3);   // show top 3 outcomes on card
+  const vol24 = fmtVol(event.volume24hr);
+  const focused = i === S.focusedIdx ? 'focused' : '';
+  const icon = event.image || event.icon || top[0]?.icon || '';
+
+  // Single binary Yes/No card — show gauge style
+  if (list.length === 1 || (top.length === 2 && top[0].binaryYesNo)) {
+    const yesP = list[0].yes;
+    const pctVal = Math.round(yesP * 100);
+    const higher = yesP >= 0.5;
+    return `
+      <div class="card ${focused}" data-idx="${i}" onclick="openEvent(${i})">
+        <div class="card-vol">${vol24}</div>
+        <div class="card-head">
+          ${iconHtml(icon)}
+          <div class="card-title">${escapeHtml(event.title || '?')}</div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-ring" style="--pct:${pctVal}%">
+            <span class="gauge-txt">${pctVal}%</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0">
+            <div class="gauge-lbl">${escapeHtml(higher ? 'YES' : 'NO')} · ${cents(higher ? yesP : (1-yesP))}</div>
+            <div style="display:flex;gap:3px">
+              <span class="btn-yes">Yes ${cents(yesP)}</span>
+              <span class="btn-no">No ${cents(1-yesP)}</span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const rows = top.map(o => {
+    const flag = iconHtml(o.icon, 'outcome-flag');
+    return `
+      <div class="outcome">
+        <div class="outcome-name">${flag}<span>${escapeHtml(o.name)}</span></div>
+        <div class="outcome-pct">${pct(o.yes)}</div>
+        <span class="btn-yes">Yes</span>
+        <span class="btn-no">No</span>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="card ${focused}" data-idx="${i}" onclick="openEvent(${i})">
+      <div class="card-vol">${vol24}</div>
+      <div class="card-head">
+        ${iconHtml(icon)}
+        <div class="card-title">${escapeHtml(event.title || '?')}</div>
+      </div>
+      <div class="outcomes">${rows}</div>
+    </div>`;
 }
 
-/* ── Render detail ── */
+function iconHtml(url, cls='card-icon') {
+  if (url && (url.startsWith('http') || url.startsWith('/'))) {
+    return `<div class="${cls}"><img src="${escapeHtml(url)}" onerror="this.style.display='none'"/></div>`;
+  }
+  return `<div class="${cls}"></div>`;
+}
+
+function scrollFocusedIntoView() {
+  const el = document.querySelector('.card.focused');
+  if (el) el.scrollIntoView({ block:'nearest', behavior:'auto' });
+}
+
+/* ── Detail ── */
 async function openEvent(i) {
-  const e = S.events[i];
-  if (!e) return;
-  S.selectedEvent = e;
-  S.view = 'detail';
-  S.detailScrollIdx = 0;
-  S.detailSubTab = 'markets';
+  const e = S.events[i]; if (!e) return;
+  S.selectedEvent = e; S.view = 'detail'; S.detailScrollIdx = 0;
+  S.priceHistories = {};
   $('dbgState').textContent = 'detail';
   render();
-  // Fetch fresh detail (with fuller market list)
   try {
-    const detail = await fetchEventDetail(e.id);
-    S.selectedEvent = detail;
+    const full = await fetchEventDetail(e.id);
+    S.selectedEvent = full;
     render();
+    loadPriceHistoriesForCurrentEvent();
   } catch(err) { console.error('detail fail', err); }
   startDetailTimer();
 }
 
 function closeEvent() {
-  S.view = 'list';
-  S.selectedEvent = null;
+  S.view = 'list'; S.selectedEvent = null; S.priceHistories = {};
   stopDetailTimer();
   $('dbgState').textContent = 'list';
   render();
@@ -435,108 +554,192 @@ function startDetailTimer() {
   S.detailTimer = setInterval(async () => {
     if (S.view !== 'detail' || !S.selectedEvent) return;
     try {
-      const detail = await fetchEventDetail(S.selectedEvent.id);
-      // Preserve scroll
-      const main = $('main');
-      const sTop = main.scrollTop;
-      S.selectedEvent = detail;
-      render();
+      const full = await fetchEventDetail(S.selectedEvent.id);
+      const main = $('main'); const sTop = main.scrollTop;
+      S.selectedEvent = full; render();
       main.scrollTop = sTop;
     } catch(e) {}
   }, DETAIL_REFRESH_MS);
 }
-
 function stopDetailTimer() {
   if (S.detailTimer) { clearInterval(S.detailTimer); S.detailTimer = null; }
 }
 
-function switchSubTab(k) {
-  S.detailSubTab = k;
+async function loadPriceHistoriesForCurrentEvent() {
+  const e = S.selectedEvent; if (!e) return;
+  const { list } = eventOutcomes(e);
+  const top = list.slice(0, 4);   // limit to top 4 outcomes for chart clarity
+  const range = S.selectedTimeRange;
+  const results = await Promise.all(top.map(async (o, idx) => {
+    const tokenIds = parseArr(o.market.clobTokenIds);
+    const tokId = tokenIds[0];
+    if (!tokId) return [];
+    return await fetchPriceHistory(tokId, range);
+  }));
+  S.priceHistories = {};
+  results.forEach((h, idx) => S.priceHistories[idx] = h);
   render();
+  const main = $('main'); // no scroll jump on chart update
+}
+
+function setTimeRange(k) {
+  S.selectedTimeRange = k;
+  render();
+  loadPriceHistoriesForCurrentEvent();
 }
 
 function renderDetail() {
-  const e = S.selectedEvent;
-  if (!e) return;
+  const e = S.selectedEvent; if (!e) return;
+  const { list, grouped } = eventOutcomes(e);
+  const top = list.slice(0, 4);
   const totalVol = fmtVol(e.volume);
   const vol24 = fmtVol(e.volume24hr);
-  const endDate = e.endDate ? new Date(e.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
-  const markets = (e.markets || []).slice().sort((a,b) => (parseFloat(b.liquidity)||0) - (parseFloat(a.liquidity)||0));
+  const endDate = fmtDate(e.endDate);
+  const catTag = (e.tags||[])[0]?.label || 'Markets';
 
-  let body = '';
-  if (S.detailSubTab === 'markets') {
-    body = markets.map(m => renderMarketCard(m)).join('') ||
-      `<div class="empty"><div class="empty-title">NO MARKETS</div></div>`;
-  } else {
-    const desc = (e.description || markets[0]?.description || 'No description available.').trim();
-    body = `<div class="desc">${escapeHtml(desc)}</div>`;
-  }
+  const legendHtml = top.map((o, idx) => `
+    <div class="legend-item">
+      <span class="legend-dot" style="background:${LINE_COLORS[idx]}"></span>
+      <span class="n">${escapeHtml(o.name)}</span>
+      <span class="p">${pct(o.yes)}</span>
+    </div>`).join('');
 
-  $('main').innerHTML = `
-    <div class="detail-back" onclick="closeEvent()">◀ BACK</div>
-    <div class="detail-header">
-      <div class="detail-title">${escapeHtml(e.title || '?')}</div>
-      <div class="detail-stats">
-        <div class="detail-stat"><span class="lbl">Vol 24h</span><span class="val yes">${vol24}</span></div>
-        <div class="detail-stat"><span class="lbl">Total</span><span class="val">${totalVol}</span></div>
-        <div class="detail-stat"><span class="lbl">Ends</span><span class="val">${endDate}</span></div>
-      </div>
-    </div>
-    <div class="subtabs">
-      <button class="subtab ${S.detailSubTab==='markets'?'active':''}" onclick="switchSubTab('markets')">MARKETS (${markets.length})</button>
-      <button class="subtab ${S.detailSubTab==='details'?'active':''}" onclick="switchSubTab('details')">DETAILS</button>
-    </div>
-    ${body}
-  `;
-}
+  const chartHtml = renderChart(top);
 
-function renderMarketCard(m) {
-  const outcomes = parseArr(m.outcomes);
-  const prices = parseArr(m.outcomePrices).map(x => parseFloat(x) || 0);
-  const vol24 = fmtVol(m.volume24hr);
+  const timeHtml = TIME_RANGES.map(t => `
+    <button class="${S.selectedTimeRange===t.key?'active':''}" onclick="setTimeRange('${t.key}')">${t.label}</button>`).join('');
 
-  // Sort outcomes by price desc for multi-outcome markets
-  const pairs = outcomes.map((o, i) => ({ name: o, price: prices[i] || 0, idx: i }));
-  const isBinary = outcomes.length === 2 && outcomes[0].toLowerCase() === 'yes';
-  if (!isBinary) pairs.sort((a,b) => b.price - a.price);
-
-  const rows = pairs.map(p => {
-    const width = Math.max(2, Math.round(p.price * 100));
-    const isNo = isBinary && p.name.toLowerCase() === 'no';
+  // Outcome list rows (full)
+  const outcomesHtml = list.slice(0, 20).map(o => {
+    const p = o.yes;
+    const flag = iconHtml(o.icon, 'orow-flag');
+    const volSub = o.vol24 > 0 ? `<span class="sub">${fmtVol(o.vol24)} Vol</span>` : '';
     return `
-      <div class="mkt-outcome-row">
-        <span class="mkt-outcome-name">${escapeHtml(p.name)}</span>
-        <div class="mkt-outcome-bar"><div class="mkt-outcome-bar-fill ${isNo?'no':''}" style="width:${width}%"></div></div>
-        <span class="mkt-outcome-pct ${isNo?'no':''}">${pct(p.price)}</span>
+      <div class="orow">
+        ${flag}
+        <div class="orow-name">${escapeHtml(o.name)}${volSub}</div>
+        <div class="orow-pct">${pct(p)}</div>
+        <div class="orow-buttons">
+          <span class="btn-yes">Yes ${cents(p)}</span>
+          <span class="btn-no">No ${cents(1-p)}</span>
+        </div>
       </div>`;
   }).join('');
 
-  return `
-    <div class="mkt-card">
-      <div class="mkt-question">${escapeHtml(m.question || '?')}</div>
-      <div class="mkt-outcomes">${rows}</div>
-      <div class="mkt-vol">Vol 24h · ${vol24}</div>
-    </div>`;
+  // FAQ
+  const question = e.title || '?';
+  const faqs = [
+    { q: `What is the ${question} prediction market?`,
+      a: e.description || (e.markets||[])[0]?.description || 'This market resolves based on the official outcome.' },
+    { q: `How much trading activity has ${question} generated?`,
+      a: `This market has ${totalVol} in total volume with ${vol24} traded in the last 24 hours across ${(e.markets||[]).length} outcomes.` },
+    { q: `How do I trade on ${question}?`,
+      a: `Prediction markets let you buy shares in outcomes. Yes shares pay out $1 if the outcome happens; No shares pay $1 if it doesn't. The share price reflects the market's current probability estimate.` },
+    { q: `What are the current odds?`,
+      a: top.map(o => `${o.name}: ${pct(o.yes)}`).join('\n') }
+  ];
+  const faqHtml = faqs.map((f, i) => `
+    <div class="faq-item ${S.faqOpen[i]?'open':''}">
+      <div class="faq-q" onclick="toggleFaq(${i})">
+        <span>${escapeHtml(f.q)}</span>
+        <span class="chev">${S.faqOpen[i]?'▲':'▼'}</span>
+      </div>
+      <div class="faq-a">${escapeHtml(f.a)}</div>
+    </div>`).join('');
+
+  // Trade panel: top outcome as default selected
+  const topO = top[0];
+  const tradeHtml = topO ? `
+    <div class="trade">
+      <div class="trade-row">
+        <button class="trade-btn yes">Yes ${cents(topO.yes)}</button>
+        <button class="trade-btn no">No ${cents(1-topO.yes)}</button>
+      </div>
+      <button class="trade-cta">Trade ${escapeHtml(topO.name)}</button>
+      <div class="trade-fine">By trading, you agree to the Terms of Use.</div>
+    </div>` : '';
+
+  $('main').innerHTML = `
+    <div class="detail-back" onclick="closeEvent()">◀ <span class="crumb">${escapeHtml(catTag)} · </span>Back</div>
+    <div class="detail-header">
+      <div class="detail-title-row">
+        ${iconHtml(e.image||e.icon, 'detail-icon')}
+        <div class="detail-title">${escapeHtml(e.title||'?')}</div>
+      </div>
+      <div class="legend">${legendHtml}</div>
+    </div>
+    <div class="chart-wrap">${chartHtml}</div>
+    <div class="chart-time">${timeHtml}</div>
+    <div class="detail-meta">
+      <span><span class="lbl">Vol.</span> <span class="val">${totalVol}</span></span>
+      <span><span class="lbl">Ends</span> <span class="val">${endDate}</span></span>
+    </div>
+    <div class="section-hdr">OUTCOMES · ${list.length}</div>
+    ${outcomesHtml}
+    <div class="section-hdr">FREQUENTLY ASKED</div>
+    <div class="faq">${faqHtml}</div>
+    ${tradeHtml}
+  `;
 }
 
-/* ── Escape ── */
-function escapeHtml(s) {
-  if (s == null) return '';
-  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toggleFaq(i) {
+  S.faqOpen[i] = !S.faqOpen[i];
+  render();
 }
 
-/* ── Render dispatcher ── */
+/* ── Chart (multi-line SVG) ── */
+function renderChart(topOutcomes) {
+  const W = 220, H = 70, padL = 2, padR = 2, padT = 4, padB = 8;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  // Gather histories
+  const hists = topOutcomes.map((o, idx) => S.priceHistories[idx] || []);
+  const allPoints = hists.flat();
+  if (allPoints.length === 0) {
+    // Placeholder if no history loaded yet
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <text x="${W/2}" y="${H/2}" fill="#5a5a6a" font-size="7" text-anchor="middle" font-family="Inter,sans-serif">loading chart…</text>
+    </svg>`;
+  }
+  const tMin = Math.min(...allPoints.map(p => p.t));
+  const tMax = Math.max(...allPoints.map(p => p.t));
+  const pMin = 0;
+  const pMax = Math.max(0.35, Math.max(...allPoints.map(p => p.p)) * 1.15);
+
+  const xScale = t => padL + ((t - tMin) / Math.max(1, tMax - tMin)) * plotW;
+  const yScale = p => padT + plotH - ((p - pMin) / Math.max(0.01, pMax - pMin)) * plotH;
+
+  // Y-axis grid lines
+  const gridLines = [0, 0.25, 0.5, 0.75, 1].filter(v => v <= pMax).map(v => {
+    const y = yScale(v);
+    return `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#22223a" stroke-width="0.4"/>
+            <text x="${W-padR}" y="${y-1}" fill="#5a5a6a" font-size="6" text-anchor="end" font-family="JetBrains Mono">${Math.round(v*100)}%</text>`;
+  }).join('');
+
+  // Lines
+  const lines = hists.map((h, idx) => {
+    if (h.length < 2) return '';
+    const d = h.map((pt, i) => `${i===0?'M':'L'} ${xScale(pt.t).toFixed(1)} ${yScale(pt.p).toFixed(1)}`).join(' ');
+    return `<path d="${d}" fill="none" stroke="${LINE_COLORS[idx]}" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  }).join('');
+
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    ${gridLines}
+    ${lines}
+  </svg>`;
+}
+
+/* ── Dispatcher ── */
 function render() {
-  renderTabs();
-  $('footerLeft').textContent = 'v1.0.0';
+  renderNav();
+  $('footerLeft').textContent = 'v2.0.0';
   updateFooter();
   if (S.view === 'detail') renderDetail();
   else renderList();
 }
-
 function updateFooter() {
   if (S.view === 'detail' && S.selectedEvent) {
-    $('footerMid').textContent = (S.selectedEvent.markets || []).length + ' markets';
+    $('footerMid').textContent = (S.selectedEvent.markets||[]).length + ' outcomes';
   } else if (S.refreshing) {
     $('footerMid').textContent = 'refreshing…';
   } else {
@@ -544,7 +747,7 @@ function updateFooter() {
   }
 }
 
-/* ── Countdown ── */
+/* Countdown */
 function startCountdown() {
   if (S.countdownTimer) clearInterval(S.countdownTimer);
   S.countdown = LIST_REFRESH_MS/1000;
@@ -558,99 +761,55 @@ function startCountdown() {
   }, 1000);
 }
 
-/* ═══════════════════════════════════
-   R1 hardware events
-   ═══════════════════════════════════ */
-
+/* ═══════════ R1 hardware ═══════════ */
 function moveFocus(dir) {
-  if (S.view === 'detail') {
-    scrollDetail(dir);
-    return;
-  }
+  if (S.view === 'detail') { scrollDetail(dir); return; }
   const max = S.events.length - 1;
   S.focusedIdx = Math.max(0, Math.min(max, S.focusedIdx + dir));
-  const focused = document.querySelectorAll('.event-row');
-  focused.forEach(el => el.classList.remove('focused'));
-  const el = focused[S.focusedIdx];
-  if (el) {
-    el.classList.add('focused');
-    el.scrollIntoView({ block: 'nearest', behavior: 'auto' });
-  }
+  document.querySelectorAll('.card').forEach(el => el.classList.remove('focused'));
+  const el = document.querySelectorAll('.card')[S.focusedIdx];
+  if (el) { el.classList.add('focused'); el.scrollIntoView({ block:'nearest', behavior:'auto' }); }
 }
-
-/* Detail scroll: state-tracked section idx (MLB scroll fix recipe) */
 function getDetailSections() {
-  return Array.from(document.querySelectorAll('#main .mkt-card, #main .detail-header, #main .desc, #main .subtabs, #main .detail-back'));
+  return Array.from(document.querySelectorAll('#main .detail-header, #main .chart-wrap, #main .chart-time, #main .detail-meta, #main .section-hdr, #main .orow, #main .faq-item, #main .trade'));
 }
 function scrollDetail(dir) {
-  const sections = getDetailSections();
-  if (sections.length === 0) return;
-  S.detailScrollIdx = Math.max(0, Math.min(S.detailScrollIdx + dir, sections.length - 1));
-  const target = sections[S.detailScrollIdx];
-  if (target) target.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+  const s = getDetailSections(); if (s.length === 0) return;
+  S.detailScrollIdx = Math.max(0, Math.min(S.detailScrollIdx + dir, s.length - 1));
+  s[S.detailScrollIdx].scrollIntoView({ block:'nearest', behavior:'auto' });
 }
-
 function onScrollUp()   { window.__dbg.hit('up');   moveFocus(-1); }
 function onScrollDown() { window.__dbg.hit('down'); moveFocus(+1); }
-function onSideClick() {
-  window.__dbg.hit('side');
-  if (S.view === 'detail') return;
-  openEvent(S.focusedIdx);
-}
-function onLongPress() {
-  window.__dbg.hit('long');
-  if (S.view === 'list') loadList();
-  else if (S.view === 'detail') openEvent(S.events.findIndex(e => e.id === S.selectedEvent?.id));
-}
-function onBack() {
-  if (S.view === 'detail') closeEvent();
-}
+function onSideClick()  { window.__dbg.hit('side'); if (S.view === 'detail') return; openEvent(S.focusedIdx); }
+function onLongPress()  { window.__dbg.hit('long'); if (S.view === 'list') loadList(); }
+function onBack()       { if (S.view === 'detail') closeEvent(); }
 
-/* Listen on window, document, body — multi-target for R1 compat */
 ['scrollUp','scrollDown','sideClick','longPressStart'].forEach(evt => {
-  const h = evt === 'scrollUp' ? onScrollUp
-        : evt === 'scrollDown' ? onScrollDown
-        : evt === 'sideClick' ? onSideClick
-        : onLongPress;
-  window.addEventListener(evt, h);
-  document.addEventListener(evt, h);
-  document.body.addEventListener(evt, h);
+  const h = evt==='scrollUp'?onScrollUp:evt==='scrollDown'?onScrollDown:evt==='sideClick'?onSideClick:onLongPress;
+  window.addEventListener(evt, h); document.addEventListener(evt, h); document.body.addEventListener(evt, h);
 });
-
-/* Mouse wheel fallback (throttled 150ms) */
-let _wheelLast = 0;
+let _wl = 0;
 window.addEventListener('wheel', e => {
-  const now = Date.now();
-  if (now - _wheelLast < 150) return;
-  _wheelLast = now;
+  const now = Date.now(); if (now - _wl < 150) return; _wl = now;
   if (e.deltaY > 0) onScrollDown(); else onScrollUp();
-}, { passive: true });
-
-/* Keyboard fallback for testing */
+}, { passive:true });
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowUp') onScrollUp();
-  else if (e.key === 'ArrowDown') onScrollDown();
-  else if (e.key === 'Enter' || e.key === ' ') onSideClick();
-  else if (e.key === 'Escape' || e.key === 'Backspace') onBack();
-  else if (e.key === 'r' || e.key === 'R') onLongPress();
+  if (e.key==='ArrowUp') onScrollUp();
+  else if (e.key==='ArrowDown') onScrollDown();
+  else if (e.key==='Enter'||e.key===' ') onSideClick();
+  else if (e.key==='Escape'||e.key==='Backspace') onBack();
+  else if (e.key==='r'||e.key==='R') onLongPress();
 });
 
-/* Touch tap on rows already handled via onclick attribute */
-
-/* Double-tap header to toggle debug HUD */
-let _hdrTaps = 0, _hdrTapTimer = null;
+/* Double-tap header toggles debug HUD */
+let _hdrTaps = 0, _hdrTimer = null;
 $('appHeader').addEventListener('click', () => {
-  _hdrTaps++;
-  clearTimeout(_hdrTapTimer);
-  _hdrTapTimer = setTimeout(() => { _hdrTaps = 0; }, 500);
-  if (_hdrTaps >= 2) {
-    $('dbg').classList.toggle('show');
-    _hdrTaps = 0;
-  }
+  _hdrTaps++; clearTimeout(_hdrTimer); _hdrTimer = setTimeout(()=>_hdrTaps=0, 500);
+  if (_hdrTaps >= 2) { $('dbg').classList.toggle('show'); _hdrTaps = 0; }
 });
 
-/* ── Init ── */
-renderTabs();
+/* Init */
+renderNav();
 loadList();
 startCountdown();
 </script>
